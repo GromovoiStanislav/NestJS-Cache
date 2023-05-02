@@ -8,12 +8,35 @@ export class AppService {
   }
 
   async getHello() {
-    await this.cacheManager.set("cached_item", { key: 32, ttl: 10 * 1000 });
-    await this.cacheManager.del('cached_item');
-    await this.cacheManager.reset();
+    // @ts-ignore
+    await this.cacheManager.set("cached_item", 32, { ttl: 10 });
+    // await this.cacheManager.del("cached_item");
+    // await this.cacheManager.reset();
+    console.log(await this.cacheManager.store.keys());
     const cachedItem = await this.cacheManager.get("cached_item");
     console.log(cachedItem);
     return "Hello World!";
+  }
+
+
+  async getRandom() {
+    const randomValue = Math.random();
+    console.log("randomValue", randomValue);
+    return randomValue;
+  }
+
+  async getRandom2() {
+    const cachedItem = await this.cacheManager.get("cached_item2");
+    if (cachedItem) {
+      console.log("cachedItem", cachedItem);
+      return cachedItem;
+    }
+
+    const randomValue = Math.random() * 10;
+    // @ts-ignore
+    await this.cacheManager.set("cached_item2", randomValue, { ttl: 10 });
+    console.log("randomValue", randomValue);
+    return randomValue;
   }
 
 }
